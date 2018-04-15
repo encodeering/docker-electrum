@@ -5,6 +5,7 @@ set -e
 name=wallet
 size=75
 force=
+transfer=0
 
 while getopts "ftn:s:" OPT; do
   case ${OPT} in
@@ -16,6 +17,9 @@ while getopts "ftn:s:" OPT; do
       ;;
     f)
       force=-f
+      ;;
+    t)
+      transfer=1
       ;;
     *)
       exit 1
@@ -49,6 +53,8 @@ echo "connecting ${wallethome} for ${name}"
 
 mkdir -p "${wallethome}/.electrum"
 mkdir -p "${secrethome}/.electrum"
+
+[ "${transfer}" -eq 1 ] && cp -af "${wallethome}/.electrum" "${secrethome}"
 
 [ ! -f "${secrethome}/bind-hooks" ] && { echo          > "${secrethome}/bind-hooks"; }
 [ ! -f "${secrethome}/exec-hooks" ] && { echo "set -e" > "${secrethome}/exec-hooks"; chmod +x "${secrethome}/exec-hooks"; }
