@@ -1,0 +1,36 @@
+language: bash
+
+sudo: required
+
+services:
+- docker
+
+env:
+  global:
+    - secure: "GIt3lHuycuW8KR3tBpyKxyXy6+6SFGZXJLKZjnQzuOJ4PteV7y71igKcwCBYiDkvSnIM/zgfEll+tdOnq4g5X487WsP1Do/4cSrpCSD+UTqX+P6Z/JkLM05KJvc2NNG4Fpsk9+/hBdLV7r2xiFZ7lFl0HtK18qrDsTBdw/1eZ2iG6y9dDgkUjpU5ZO2UR5AzzVONiLdEyZX1/LnY9oIuwhn/WEPh+AU9cQkAbYOj9j082Iyl5AC540j5JiUcCikxp50iEwNU4/hasMbsqiL+tiXhbaNBsasZuHZ8P6izdSKYaEyMD3i9HvXZQsrrG3Rybfmzb+9l2xZj/weRCReT68/pLhoXunHVxTJtXDedPj6Y3F+zX1uvPnnz9omugEeuDRvE+JFya5hkC0+HjZB8YJBuO+QeU3R60EOJ4ri80tKQKgJ9hJEMpZtl73raLlgrWZ/ATdqGkvYOL63//0Sup+0+uCEaOmUk4dGScNyzzwOLSPa19b7Jr1rbQ7ntPSoCCr+ovf2qEz1vNTcWHWM9KqyIMix6VvHHwBGOgsYxy29EUS+tL1D5FmmiSyuINyLhACXF5RpAhW0eZNjryrP9o0vDeJNnFZj1cIbvP4SNR2wmIu6woUSe5KUtxXR64mR6NvPy/Evq4fsV0SaCZc0m+zjXEcDExcidA9YeD+dRY7Y="
+    - secure: "T8qZ8fKTbLp7yrtJdgc6HotqVLLMjSms/oX6AnfbudYKN7HRZCZeu355ZecfHNzc1y4X/WO0v5X3lLEGXDi+PrE8k67lX7WPOfiD5QC5h2D6T4YOr0XcJliLJrKOQwGqgdLGd9z7zoaCH4pR9rxnW5u6mMmgrTPa3ZTL88lLbn+pu29ij+yp5PTgj3kKIM1MUVpDeVZmwqB2krEAYA+PZsUR3cztSfpMJbO3rXKirx4+LTui2D0pXVSkchv7R5icN0WaW7TSciK9DshLgKFX7iCVDAwAUa0W9cdsOkL1hsugDfHPfwjJ+ellMbQc32VCpHy/3yQYzDaprfaK05fBjVxg16r6pusPZPVTqvc40aP6BnddE59EKa51uRMJORo4X2MS3PTVUkVkPdNkhPqL5xyZmspkMjBxC3AY92zI281tTqL6ZUDD7JESudv/jPhq1tAcl8vyUw0pTPmsjWPyv/KfgkZ5VQLlbpKuB8YVS+q8o8X4ZAd0KktN08nvOcvvshmmtI3qLdQ9/hEUp78wsTQb6h3RY8G7ygJc+KzCjGE+FgwUYeG8OGT9l7cHtu4gu8maDrDlEmgacz6+LjOPKa5R/4fg+Fy+FNGGJFHzRvxC0Xzo8qP79bzVWXY3TZykBTBjp/52Ef1Jc3Pm2UNjgGJZ97PHRGeNl8L+RrrDGr8="
+    - secure: "XtgVMfmv3Ycuukpv6RMpQqcrET/LBEXbkFWd5n47bmMNr8g83cCoYWAyQAk4GrtKdVqLBFAhOOa7AWNLc+2oRewFYvIIcuFoTXy879gsdMGaJNmPoi2u9gTc7l3TzPJxiZJvNYN64nI1RIbId64scdf2lPP6LB7g0AnW1fCLlRaF+fTh9JT6/uY8Mj/6SJpgn2KC39MJ/tFqCL+zEcabGhr1n6jnDHhvRiVAgBZNWgaT1m3kLMPzQp981EGhPynXZ6GXlNlYilBQNps7ozRRVtmRBt6UqJc6qlMUtJAHMV4YHekX7pGT4mgSjt4uNM8/Cy/KbTm8j7/dG/3JvHde+R+36gjSceyWky6kbU5lu7onibMG08Kqao7ra4D5Ix9n+kVtdMYgyEwJePQpaPrlDADYvFPLc53zwHgYOd0ZO48MCLR+3+Dyw+z1MGEglaieQTHerP6O6ncxcAaSeFc3c4sLYwY9FMM4HAsT2fokxqCQxXgNaAL/SNnbNpotbl1hj5wHwXpYgdx4AYEtrZTttK42wKRyrx4tHwgQuI/BD4sRxVvG41QuMG9usOE19/UKqlpA78iDRenp3eE5t6uD3k95tGVezhlxRvcl5kUQRg9roiistrQTzCA/3eBV9TyvuzMtFIGErimyi/Sk4CPRXMdciKPGXhbSanubdm/kwFA="
+    - PROJECT="electrum"
+    - REPOSITORY="encodeering"
+  matrix:
+    - BASE=alpine ARCH=amd64 VERSION=3.1 PIN=3.1.2
+    - BASE=alpine ARCH=armhf VERSION=3.1 PIN=3.1.2
+
+install:
+- bash <(curl https://raw.githubusercontent.com/encodeering/docker-ci/master/install.sh) 0.1.10
+
+before_script:
+- sudo -E bash ./module.sh "." "./setup.sh"
+
+script:
+- sudo -E bash ./module.sh "modules" "./build.sh"
+
+after_script:
+- docker images
+
+deploy:
+  script: sudo -E bash ./module.sh "." "./release.sh"
+  provider: script
+  skip_cleanup: true
+  on:
+    all_branches: true
