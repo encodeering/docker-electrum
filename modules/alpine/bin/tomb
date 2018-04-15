@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+        pid=/var/run/electrum/electrum.pid
+[ -f "${pid}" -a "$1" = "open" ] && {
+    echo "warning: another tomb has already been attached. please proceed with the steps in the given order: "
+    echo "1. tomb close `cat  ${pid} | xargs basename`"
+    echo "2. tomb $@"
+
+    exit 1
+}
+
+exec tomb-client $@
