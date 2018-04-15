@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -e
+
+name=wallet
+size=75
+force=
+
+while getopts "ftn:s:" OPT; do
+  case ${OPT} in
+    n)
+      name=${OPTARG}
+      ;;
+    s)
+      size=${OPTARG}
+      ;;
+    f)
+      force=-f
+      ;;
+    *)
+      exit 1
+      ;;
+  esac
+done
+
+dig      () { tomb dig   "${force}" "${name}" -s "${size}"; }
+forge    () { tomb forge "${force}" "${name}.key"; }
+lock     () { tomb lock  "${force}" "${name}" -k "${name}.key"; }
+open     () { tomb open  "${force}" "${name}" -k "${name}.key"; }
+close    () { tomb close            "${name}"; }
+activate () {
+    local pattern=${1//\//\\/};
+    local file=${2};
+
+    sed -i -n -e "/^${pattern}/!p" -e "\$a${pattern}" "${file}"
+}
+
+echo "creating tomb for ${name} with size ${size}"
+
+dig
+forge
+lock
+open
+
+wallethome="`echo ~`"
+secrethome="/media/${name}"
+
+echo "connecting ${wallethome} for ${name}"
+
+mkdir -p "${wallethome}/.electrum"
+mkdir -p "${secrethome}/.electrum"
+
+[ ! -f "${secrethome}/bind-hooks" ] && { echo          > "${secrethome}/bind-hooks"; }
+[ ! -f "${secrethome}/exec-hooks" ] && { echo "set -e" > "${secrethome}/exec-hooks"; chmod +x "${secrethome}/exec-hooks"; }
+
+echo "writing hooks for ${name}"
+
+activate '.electrum .electrum'     "${secrethome}/bind-hooks"
+activate 'tomb-electrum-daemon $@' "${secrethome}/exec-hooks"
+
+echo "testing hooks for ${name}"
+
+close
+open
+
+echo "setup for ${name} completed. use tomb for further interaction."

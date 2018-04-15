@@ -5,7 +5,7 @@ ARG        ELECTRUM
 WORKDIR    /usr/local/bin
 
 RUN        mv tomb tomb-client \
- &&        mkdir -p /var/run/electrum
+ &&        mkdir -p /var/run/electrum ~/.electrum
 
 COPY       bin .
 
