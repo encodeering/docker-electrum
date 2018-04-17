@@ -46,15 +46,15 @@ forge
 lock
 open
 
-wallethome="`echo ~`"
+wallethome="`echo ~`/.electrum"
 secrethome="/media/${name}"
 
 echo "connecting ${wallethome} for ${name}"
 
-mkdir -p "${wallethome}/.electrum/wallets"
+mkdir -p "${wallethome}/wallets"
 mkdir -p "${secrethome}/wallets"
 
-[ "${transfer}" -eq 1 ] && cp -af "${wallethome}/.electrum/wallets" "${secrethome}"
+[ "${transfer}" -eq 1 ] && cp -af "${wallethome}/wallets" "${secrethome}"
 
 [ ! -f "${secrethome}/bind-hooks" ] && { echo          > "${secrethome}/bind-hooks"; }
 [ ! -f "${secrethome}/exec-hooks" ] && { echo "set -e" > "${secrethome}/exec-hooks"; chmod +x "${secrethome}/exec-hooks"; }
