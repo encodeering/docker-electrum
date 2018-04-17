@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 
-        pid=/var/run/electrum/electrum.pid
-[ -f "${pid}" -a "$1" = "open" ] && {
-    echo "warning: another tomb has already been attached. please proceed with the steps in the given order: "
-    echo "1. tomb close `cat  ${pid} | xargs basename`"
-    echo "2. tomb $@"
+source $(dirname "$0")/../lib/electrum/lock
 
-    exit 1
-}
+pid=/var/run/electrum/electrum.pid
+verification="electrum"
+
+case "$1" in
+    open)
+        lock "${pid}" "${verification}" || {
+            echo "warning: another tomb might already have been attached. please proceed with the steps in the given order: "
+            echo "1. tomb close"
+            echo "2. tomb $@"
+
+            exit 1
+        }
+        ;;
+    close)
+        grep -Fq "${verification}" "${pid}" 2> /dev/null || exit 0
+
+        rm "${pid}"
+        ;;
+esac
 
 exec tomb-client $@

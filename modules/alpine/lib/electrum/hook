@@ -3,32 +3,14 @@
 # open  /media/me
 # close /media/me [me] loop20 tomb.me.1523798393.loop20
 
-source $(dirname "$0")/lock
-
-pid=/var/run/electrum/electrum.pid
-verification="$2"
-
 case "$1" in
     open)
-        lock "${pid}" "${verification}" || {
-            echo "warning: another tomb might already have been attached. please proceed with the steps in the given order: "
-            echo "1. tomb close `basename $2`"
-            echo "2. tomb close `cat  ${pid} | xargs -r basename`"
-            echo "3. tomb open  `basename $2` -k `basename $2`.key"
-
-            exit 1
-        }
-
         electrum daemon start
         electrum daemon load_wallet
         ;;
     close)
-        grep -Fq "${verification}" "${pid}" 2> /dev/null || exit 0
-
         electrum daemon close_wallet
         electrum daemon stop
-
-        rm "${pid}"
         ;;
 esac
 
