@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+lock () {
+    local file="$1"
+    local content="$2"
+
+    set -o noclobber
+
+        { > "${file}"; } &> /dev/null; local status=$?
+
+    set +o noclobber
+
+    [ ${status} -eq 0 ] && {
+        echo "${content}" > "${file}" || {
+            rm -f           "${file}"
+
+            return 1
+        }
+
+        return 0
+    }
+
+    return 1
+}

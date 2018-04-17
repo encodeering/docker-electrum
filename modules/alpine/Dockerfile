@@ -7,7 +7,8 @@ WORKDIR    /usr/local/bin
 RUN        mv tomb tomb-client \
  &&        mkdir -p /var/run/electrum ~/.electrum
 
-COPY       bin .
+COPY       bin /usr/local/bin
+COPY       lib /usr/local/lib
 
 RUN        chmod +x *
 
