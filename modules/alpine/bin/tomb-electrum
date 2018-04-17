@@ -61,8 +61,8 @@ mkdir -p "${secrethome}/.electrum"
 
 echo "writing hooks for ${name}"
 
-activate '.electrum .electrum'     "${secrethome}/bind-hooks"
-activate 'tomb-electrum-daemon $@' "${secrethome}/exec-hooks"
+activate '.electrum .electrum'             "${secrethome}/bind-hooks"
+activate '/usr/local/lib/electrum/hook $@' "${secrethome}/exec-hooks"
 
 echo "testing hooks for ${name}"
 
