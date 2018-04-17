@@ -3,7 +3,7 @@
 set -e
 
 name=wallet
-size=75
+size=10
 force=
 transfer=0
 
@@ -51,17 +51,17 @@ secrethome="/media/${name}"
 
 echo "connecting ${wallethome} for ${name}"
 
-mkdir -p "${wallethome}/.electrum"
-mkdir -p "${secrethome}/.electrum"
+mkdir -p "${wallethome}/.electrum/wallets"
+mkdir -p "${secrethome}/wallets"
 
-[ "${transfer}" -eq 1 ] && cp -af "${wallethome}/.electrum" "${secrethome}"
+[ "${transfer}" -eq 1 ] && cp -af "${wallethome}/.electrum/wallets" "${secrethome}"
 
 [ ! -f "${secrethome}/bind-hooks" ] && { echo          > "${secrethome}/bind-hooks"; }
 [ ! -f "${secrethome}/exec-hooks" ] && { echo "set -e" > "${secrethome}/exec-hooks"; chmod +x "${secrethome}/exec-hooks"; }
 
 echo "writing hooks for ${name}"
 
-activate '.electrum .electrum'             "${secrethome}/bind-hooks"
+activate 'wallets .electrum/wallets'       "${secrethome}/bind-hooks"
 activate '/usr/local/lib/electrum/hook $@' "${secrethome}/exec-hooks"
 
 echo "testing hooks for ${name}"
