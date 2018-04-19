@@ -11,13 +11,7 @@ lock () {
     set +o noclobber
 
     [ ${status} -eq 0 ] && {
-        echo "${content}" > "${file}" || {
-            rm -f           "${file}"
-
-            return 1
-        }
-
-        return 0
+        echo "${content}" > "${file}" && return 0 || rm -f "${file}"
     }
 
     return 1
