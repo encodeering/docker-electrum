@@ -14,6 +14,6 @@ RUN        chmod +x    /usr/local/bin/* \
  &&        chmod +x -R /usr/local/lib/*
 
 RUN        apk --no-cache add python3 py3-qt5 sed jq \
- &&        pip3 install https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz
+ &&        pip3 install https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz --no-cache-dir
 
 WORKDIR    /mnt/tomb
