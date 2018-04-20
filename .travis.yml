@@ -13,8 +13,8 @@ env:
     - PROJECT="electrum"
     - REPOSITORY="encodeering"
   matrix:
-    - BASE=alpine ARCH=amd64 VERSION=3.1 PIN=3.1.2
-    - BASE=alpine ARCH=armhf VERSION=3.1 PIN=3.1.2
+    - BASE=alpine ARCH=amd64 VERSION=3.1 PIN=3.1.3
+    - BASE=alpine ARCH=armhf VERSION=3.1 PIN=3.1.3
 
 install:
 - bash <(curl https://raw.githubusercontent.com/encodeering/docker-ci/master/install.sh) 0.1.10
