@@ -1,10 +1,9 @@
 FROM       tomb:2.5
 
 ARG        ELECTRUM
+ARG        KEY=2BD5824B7F9470E6
 
-WORKDIR    /usr/local/bin
-
-RUN        mv tomb tomb-client \
+RUN        mv /usr/local/bin/tomb /usr/local/bin/tomb-client \
  &&        mkdir -p /var/run/electrum ~/.electrum/wallets
 
 COPY       bin /usr/local/bin
@@ -13,7 +12,17 @@ COPY       lib /usr/local/lib
 RUN        chmod +x    /usr/local/bin/* \
  &&        chmod +x -R /usr/local/lib/electrum/*
 
-RUN        apk --no-cache add python3 py3-qt5 sed jq \
- &&        pip3 install https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz --no-cache-dir
+WORKDIR    /usr/local/src
+
+RUN        apk --no-cache add --virtual build-dependencies gnupg curl                                        \
+ &&        apk --no-cache add python3 py3-qt5 sed jq                                                         \
+ &&        curl -L https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz     > electrum.tgz  \
+ &&        curl -L https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz.asc > electrum.asc  \
+ &&        export GNUPGHOME="`pwd`"                                                                          \
+ &&        gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys "${KEY}"                                 \
+ &&        gpg --batch --verify electrum.asc electrum.tgz                                                    \
+ &&        pip3 install electrum.tgz --no-cache-dir                                                          \
+ &&        rm -rf *                                                                                          \
+ &&        apk del build-dependencies
 
 WORKDIR    /mnt/tomb
