@@ -16,12 +16,12 @@
 
 ```bash
 # armhf
-electrum () { docker run --rm -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-armhf:3.1-alpine "$@"; }
+electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-armhf:3.1-alpine "$@"; }
 ```
 
 ```bash
 # amd64
-electrum () { docker run --rm -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-amd64:3.1-alpine "$@"; }
+electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-amd64:3.1-alpine "$@"; }
 ```
 
 ### Notice
