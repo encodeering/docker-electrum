@@ -23,6 +23,6 @@ RUN        apk --no-cache add --virtual build-dependencies gnupg curl           
  &&        gpg --batch --verify electrum.asc electrum.tgz                                                    \
  &&        pip3 install electrum.tgz --no-cache-dir                                                          \
  &&        rm -rf *                                                                                          \
- &&        apk del build-dependencies
+ &&        apk del --force-broken-world build-dependencies
 
 WORKDIR    /mnt/tomb
