@@ -6,22 +6,22 @@
 
 - https://hub.docker.com/r/encodeering/electrum-armhf/
 
-    ```docker pull encodeering/electrum-armhf:3.1-alpine```
+    ```docker pull encodeering/electrum-armhf:3.3-alpine```
 
 - https://hub.docker.com/r/encodeering/electrum-amd64/
 
-    ```docker pull encodeering/electrum-amd64:3.1-alpine```
+    ```docker pull encodeering/electrum-amd64:3.3-alpine```
 
 ### Utility
 
 ```bash
 # armhf
-electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-armhf:3.1-alpine "$@"; }
+electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-armhf:3.3-alpine "$@"; }
 ```
 
 ```bash
 # amd64
-electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-amd64:3.1-alpine "$@"; }
+electrum () { docker run -it --privileged -v `pwd`:/mnt/tomb encodeering/electrum-amd64:3.3-alpine "$@"; }
 ```
 
 ### Notice
