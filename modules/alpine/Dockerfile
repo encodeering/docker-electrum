@@ -14,7 +14,7 @@ RUN        chmod +x    /usr/local/bin/* \
 
 WORKDIR    /usr/local/src
 
-RUN        apk --no-cache add --virtual build-dependencies gnupg curl                                        \
+RUN        apk --no-cache add --virtual build-dependencies gnupg curl build-base python3-dev                 \
  &&        apk --no-cache add python3 py3-qt5 sed jq                                                         \
  &&        curl -L https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz     > electrum.tgz  \
  &&        curl -L https://download.electrum.org/${ELECTRUM}/Electrum-${ELECTRUM}.tar.gz.asc > electrum.asc  \
